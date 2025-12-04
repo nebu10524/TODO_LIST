@@ -1,0 +1,28 @@
+<div class="contenedor">
+  <h1>Contador de Tareas</h1>
+
+  <div class="info-actual">
+    <p><strong>Total de Tareas:</strong> <span id="totalTareas">0</span></p>
+  </div>
+</div>
+
+<script>
+  async function cargarContador() {
+    try {
+      let res = await servidor("/tareas/usuario/" + usuario.id_usuario, "GET");
+      
+      let total = 0;
+      
+      if (res.tareas) {
+        total = res.tareas.length;
+      }
+      
+      obtener("totalTareas").textContent = total;
+      
+    } catch(e) {
+      mensaje("Error al cargar", "error");
+    }
+  }
+  
+  cargarContador();
+</script>

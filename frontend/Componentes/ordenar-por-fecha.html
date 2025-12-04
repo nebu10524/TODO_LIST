@@ -1,0 +1,49 @@
+<div class="contenedor">
+  <h1>Ordenar Tareas por Fecha</h1>
+  
+  <ul id="listaTareas"></ul>
+</div>
+<script>
+  async function ordenarPorFecha() {
+    try {
+      let res = await servidor("/tareas/usuario/" + usuario.id_usuario, "GET");
+      
+      if (res.tareas) {
+        res.tareas.sort(function(a, b) {
+          return new Date(a.fecha) - new Date(b.fecha);
+        });
+        
+        let lista = obtener("listaTareas");
+        lista.innerHTML = "";
+        
+        for (let i = 0; i < res.tareas.length; i++) {
+          let t = res.tareas[i];
+          let li = crear("li");
+          
+          let info = crear("div");
+          info.className = "informacion";
+          
+          let texto = crear("span");
+          texto.textContent = t.texto;
+          texto.className = "task-text";
+          agregar(info, texto);
+          
+          let fecha = crear("small");
+          fecha.textContent = "Fecha: " + (t.fecha || "Sin fecha");
+          agregar(info, fecha);
+          
+          let prioridad = crear("small");
+          prioridad.textContent = "Prioridad: " + t.prioridad;
+          agregar(info, prioridad);
+          
+          agregar(li, info);
+          agregar(lista, li);
+        }
+      }
+    } catch(e) {
+      mensaje("Error al cargar", "error");
+    }
+  }
+  
+  ordenarPorFecha();
+</script>
